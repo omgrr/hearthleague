@@ -1,0 +1,70 @@
+<h2><%= @season.name %></h2>
+<h2>Status: <%= @season.status %></h2>
+<h2>Current nerds</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Matches Won</th>
+      <th>Games Won</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= for nerd <- @nerds_score_table do %>
+      <tr>
+        <td><%= Enum.fetch!(nerd, 0) %></td>
+        <td><%= Enum.fetch!(nerd, 1)%></td>
+        <td><%= Enum.fetch!(nerd, 2)%></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= if @season.status != "In progress" do %>
+  <%= if current_nerd(@conn) && current_nerd(@conn) not in @season.nerds do %>
+    <%= form_for @conn, season_path(@conn, :update, @season), [as: :season, method: :patch], fn _ -> %>
+      <%= submit "Sign up, you fucking nerd", class: "btn btn-primary" %>
+    <% end %>
+  <% end %>
+
+  <%= if current_nerd(@conn) && current_nerd(@conn).is_admin do %>
+    <%= form_for @conn, season_path(@conn, :update, @season), [as: :season, method: :patch], fn f -> %>
+      <%= hidden_input f, :start_season, value: "true" %>
+      <%= submit "Start the season!", class: "btn btn-primary" %>
+    <% end %>
+  <% end %>
+<% else %>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Home</th>
+        <th>Away</th>
+        <th>The better nerd</th>
+        <th>Score</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= for match <- @season.matches do %>
+        <tr>
+          <% [home, away] = match.nerds %>
+          <td><%= home.name %></td>
+          <td><%= away.name %></td>
+          <td>
+            <%= if match.winning_nerd_id do %>
+              <%= (match.nerds |> Enum.find(&(&1.id == match.winning_nerd_id))).name %></td>
+            <% end %>
+          <td>
+            <%= if match.winning_nerd_id do %>
+              <%= match.games |> Enum.filter(&(&1.winning_nerd_id == home.id)) |> Enum.count %>
+              - 
+              <%= match.games |> Enum.filter(&(&1.winning_nerd_id == away.id)) |> Enum.count %>
+            <% else %>
+              <%= link("Report score", to: match_path(@conn, :edit, match)) %></td>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

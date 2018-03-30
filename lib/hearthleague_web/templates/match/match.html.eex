@@ -1,0 +1,26 @@
+<h1> Report score</h1>
+<h2>Don't lie now.</h2>
+
+<%= form_for @changeset, match_path(@conn, :update, @match), fn f -> %>
+  <%= if f.errors != [] do %>
+    <div class="alert alert-danger">
+      <p>Oops, something went wrong! Please check the errors below:</p>
+    </div>
+  <% end %>
+	
+	<div class="form-group">
+    <label>score</label>
+    <%= text_input f, :name, class: "form-control" %>
+    <%= error_tag f, :name %>
+  </div>
+
+  <div class="form-group">
+    <label>Winning Nerd</label>
+    <%= email_input f, :email, class: "form-control" %>
+    <%= error_tag f, :email %>
+  </div>
+  
+  <div class="form-group">
+    <%= submit "Signup", class: "btn btn-primary" %>
+  </div>
+<% end %>

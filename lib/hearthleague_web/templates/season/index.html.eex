@@ -1,0 +1,20 @@
+<h1>Seasons</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+		<%= for season <- @seasons do %>
+			<tr>
+				<td><%= link season.name, to: season_path(@conn, :show, season) %></td>
+				<td><%= season.status %></td>
+			</tr>
+		<% end %>
+	</tbody>
+</table>
+
+<%= link "New Season", to: season_path(@conn, :new) %>

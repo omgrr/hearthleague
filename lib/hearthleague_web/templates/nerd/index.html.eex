@@ -1,0 +1,18 @@
+<h2>Listing Nerds</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for nerd <- @nerds do %>
+    <tr>
+      <td><%= nerd.name %></td>
+      <td><%= nerd.email %></td>
+    </tr>
+<% end %>
+  </tbody>
+</table>

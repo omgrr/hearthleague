@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+  webapp:
+    build: .
+    ports:
+      - 80:80
+    command: mix phx.server
+
+  postgres:
+    image: postgres:9.6
+    volumes:
+      - "/usr/local/var/postgres@9.6/data"

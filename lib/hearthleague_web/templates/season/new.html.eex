@@ -1,0 +1,7 @@
+<h2>Create new season</h2>
+
+<div class="row">
+	<%= render "form.html", changeset: @changeset, action: season_path(@conn, :create) %>
+</div>
+
+<%= link "Back", to: season_path(@conn, :index) %>

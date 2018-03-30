@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
+  </head>
+
+  <body>
+    <div class="container">
+      <header class="header" style="height:70px;">
+        <nav role="navigation">
+          <ul class="nav nav-pills pull-left">
+            <%= if logged_in?(@conn) do %>
+              <li>
+                <%= link("Log out", to: session_path(@conn, :delete), method: :delete) %>
+              </li>
+            <% else %>
+              <li class="nav-item">
+                <%= link "Register", to: registration_path(@conn, :new) %>
+              </li>
+              <li>
+                <%= link "Log in", to: session_path(@conn, :new) %>
+              </li>
+            <% end %>
+          </ul>
+          <ul class="nav nav-pills pull-right">
+            <li class="nav-item">
+              <a class="nav-linke" href="#">Schedule</a>
+            </li>
+            <li class="nav-item">
+              <%= link "Nerds", to: nerd_path(@conn, :index) %>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Matches</a>
+            </li>
+            <li class="nav-item">
+              <%= link "Seasons", to: season_path(@conn, :index) %>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Rules</a>
+            </li>
+          </ul>
+        </nav>
+      </header>
+
+      <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
+      <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
+
+      <main role="main">
+        <%= render @view_module, @view_template, assigns %>
+      </main>
+
+    </div> <!-- /container -->
+    <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
+  </body>
+</html>

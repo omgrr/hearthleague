@@ -1,0 +1,45 @@
+<h1> Report score</h1>
+<h2>Don't lie now.</h2>
+
+<%= for params <- @games do %>
+  <% changeset = params[:changeset] %>
+  <% game = params[:game] %>
+
+  <%= if game.match.winning_nerd_id do %>
+    <%= if game.winning_nerd_id do %>
+      <h3>Game</h3>
+      <% [home, away] = game.nerds %>
+      <div class="form-group col-md-4">
+        <label><%=home.name %>'s Deck</label>
+        <p>Other</p>
+      </div>
+      <div class="form-group col-md-4">
+        <label><%=away.name %>'s Deck</label>
+        <p>Other</p>
+      </div>
+      <div class="form-group col-md-4">
+        <label>Winner</label>
+        <p><%= (game.nerds |> Enum.find(&(&1.id == game.winning_nerd_id))).name %></p>
+      </div>
+    <% end %>
+  <% else %>
+    <%= form_for changeset, game_path(@conn, :update, game), fn f -> %>
+      <%= for nerd <- game.nerds do %>  
+        <div class="form-group col-md-4">
+          <label><%=nerd.name %>'s Deck</label>
+          <%= select f, String.to_atom("deck_#{nerd.id}"), ["Other"], class: "form-control" %>
+          <%= error_tag f, :name %>
+        </div>
+      <% end %>
+      <% select_options = game_select_options(game.nerds, game) %>
+      <div class="form-group col-md-4">
+        <label>Winner</label>
+        <%= select f, :winning_nerd_id, select_options, class: "form-control" %>
+      </div>
+      <div class="form-group">
+        <%= submit "Submit Game", class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>
+

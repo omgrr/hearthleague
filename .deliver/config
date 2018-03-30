@@ -1,0 +1,17 @@
+# .deliver/config
+
+APP="hearthleague"
+
+BUILD_HOST="ec2-18-218-90-214.us-east-2.compute.amazonaws.com"
+BUILD_USER="builder"
+BUILD_AT="/tmp/edeliver/hearthleague/builds"
+
+# For *Phoenix* projects, symlink prod.secret.exs to our tmp source
+pre_erlang_get_and_update_deps() {
+  local _prod_secret_path="/home/builder/prod.secret.exs"
+  if [ "$TARGET_MIX_ENV" = "prod" ]; then
+    __sync_remote "
+      ln -sfn '$_prod_secret_path' '$BUILD_AT/config/prod.secret.exs'
+    "
+  fi
+}
